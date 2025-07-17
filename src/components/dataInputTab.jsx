@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 import { Form, Button, Input, DatePicker, addToast, Checkbox } from '@heroui/react';
 import { I18nProvider } from '@react-aria/i18n';
@@ -7,12 +8,15 @@ import db from '../assets/db';
 export default function DataInputTab() {
 
     const [errors, setErrors] = useState({});
+    const latestTariff = useLiveQuery(() => db.tariffs.orderBy('date').last());
 
     const onSubmit = async (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.currentTarget));
         data.date = new Date(data.date).toISOString();
         console.log(data);
+
+        console.log(latestTariff);
         /*         if (data.egrpou.length !== 8) {
                     setErrors({ egrpou: 'ЕГРПОУ должен состоять из 8 цифр' });
                     return;

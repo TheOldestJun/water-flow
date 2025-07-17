@@ -37,7 +37,7 @@ export default function TabsController() {
                         </CardBody>
                     </Card>
                 </Tab>
-                <Tab key="backup" title="Резервне копіювання/відновлення">
+                <Tab key="backup" title="Резервное копирование/восстановление">
                     <Card>
                         <CardBody>
                             <BackupTab />
