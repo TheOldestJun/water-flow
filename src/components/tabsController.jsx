@@ -2,6 +2,7 @@ import { Tabs, Tab, Card, CardBody } from '@heroui/react';
 import BackupTab from './backupTab';
 import DataInputTab from './dataInputTab';
 import DataTableTab from './dataTableTab';
+import PaymentsTab from './paymentsTab';
 import TariffsInputTab from './tariffsInputTab';
 
 export default function TabsController() {
@@ -19,6 +20,13 @@ export default function TabsController() {
                     <Card>
                         <CardBody>
                             <DataInputTab />
+                        </CardBody>
+                    </Card>
+                </Tab>
+                <Tab key="payments" title="Платежи">
+                    <Card>
+                        <CardBody>
+                            <PaymentsTab />
                         </CardBody>
                     </Card>
                 </Tab>
