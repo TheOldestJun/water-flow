@@ -11,6 +11,8 @@ export default function DataInputTab() {
     const onSubmit = async (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.currentTarget));
+        data.date = new Date(data.date).toISOString();
+        console.log(data);
         /*         if (data.egrpou.length !== 8) {
                     setErrors({ egrpou: 'ЕГРПОУ должен состоять из 8 цифр' });
                     return;
