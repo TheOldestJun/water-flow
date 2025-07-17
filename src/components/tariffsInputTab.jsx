@@ -1,5 +1,8 @@
+import cuid from 'cuid';
+
 import { Button, Form, Input, DatePicker, addToast } from "@heroui/react";
 import { I18nProvider } from '@react-aria/i18n';
+import db from '../assets/db';
 
 export default function TariffsInputTab() {
 
@@ -7,7 +10,26 @@ export default function TariffsInputTab() {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.currentTarget));
         data.date = new Date(data.date).toISOString();
+        data.hot = parseFloat(data.hot);
+        data.cold = parseFloat(data.cold);
+        data.sewer = parseFloat(data.sewer);
         console.log(data);
+        try {
+            const id = await db.tariffs.add({ id: cuid(), ...data });
+            if (id) {
+                addToast({
+                    title: 'Новый тариф',
+                    description: `Добавлен новый тариф`,
+                    color: 'success',
+                });
+            }
+        } catch (error) {
+            addToast({
+                title: 'Новый тариф',
+                description: `Ошибка добавления: ${error.message}`,
+                color: 'danger',
+            })
+        }
 
     }
 
