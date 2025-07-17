@@ -9,39 +9,45 @@ export default function DataInputTab() {
 
     const [errors, setErrors] = useState({});
     const latestTariff = useLiveQuery(() => db.tariffs.orderBy('date').last());
+    const latestReadings = useLiveQuery(() => db.readings.orderBy('date').last());
 
     const onSubmit = async (e) => {
         e.preventDefault();
         const data = Object.fromEntries(new FormData(e.currentTarget));
         data.date = new Date(data.date).toISOString();
+        data.hotKitchen = parseFloat(data.hotKitchen);
+        data.coldKitchen = parseFloat(data.coldKitchen);
+        data.hotBathroom = parseFloat(data.hotBathroom);
+        data.coldBathroom = parseFloat(data.coldBathroom);
+        data.sewer = data.hotKitchen + data.coldKitchen + data.hotBathroom + data.coldBathroom;
         console.log(data);
-
-        console.log(latestTariff);
-        /*         if (data.egrpou.length !== 8) {
-                    setErrors({ egrpou: 'ЕГРПОУ должен состоять из 8 цифр' });
-                    return;
-                }
-                if (autoRenew) data.autoRenew = true;
-                else data.autoRenew = false;
-                data.dateReg = new Date(data.dateReg).toISOString();
-                if (autoRenew) data.dateExp = null;
-                else data.dateExp = new Date(data.dateExp).toISOString();
-                try {
-                    const id = await db.agreements.add({ id: cuid(), ...data });
-                    if (id) {
-                        addToast({
-                            title: 'Новый договор',
-                            description: `Добавлен новый договор`,
-                            color: 'success',
-                        });
-                    }
-                } catch (error) {
-                    addToast({
-                        title: 'Новый договор',
-                        description: `Ошибка добавления: ${error.message}`,
-                        color: 'danger',
-                    })
-                } */
+        if (latestReadings?.hotBathroom > data.hotBathroom ||
+            latestReadings?.coldBathroom > data.coldBathroom ||
+            latestReadings?.hotKitchen > data.hotKitchen ||
+            latestReadings?.coldKitchen > data.coldKitchen) {
+            addToast({
+                title: 'Новые показания',
+                description: `Новые показания не могут быть меньше предыдущих`,
+                color: 'danger',
+            })
+            return
+        }
+        try {
+            const id = await db.readings.add({ id: cuid(), ...data });
+            if (id) {
+                addToast({
+                    title: 'Новые показания',
+                    description: `Добавлены новые показания`,
+                    color: 'success',
+                });
+            }
+        } catch (error) {
+            addToast({
+                title: 'Новые показания',
+                description: `Ошибка добавления: ${error.message}`,
+                color: 'danger',
+            })
+        }
     };
 
     return (
