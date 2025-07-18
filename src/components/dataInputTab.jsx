@@ -7,7 +7,6 @@ import db from '../assets/db';
 
 export default function DataInputTab() {
 
-    const [errors, setErrors] = useState({});
     const latestTariff = useLiveQuery(() => db.tariffs.orderBy('date').last());
     const latestReadings = useLiveQuery(() => db.readings.orderBy('date').last());
 
@@ -53,7 +52,6 @@ export default function DataInputTab() {
     return (
         <Form
             className="grid w-full grid-cols-4 gap-4"
-            validationErrors={errors}
             onSubmit={onSubmit}
         >
             <Input

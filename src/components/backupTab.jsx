@@ -19,7 +19,7 @@ export default function BackupTab() {
                 color: 'primary',
                 timeout: 5000
             });
-            saveAs(blob, 'agreements_backup.json');
+            saveAs(blob, 'water-flow_backup.json');
         } catch (error) {
             addToast({
                 title: 'Экспорт базы данных',
